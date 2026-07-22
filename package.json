@@ -1,0 +1,19 @@
+{
+  "name": "@ezc/proxy-common",
+  "version": "0.1.0",
+  "description": "Shared audit-fix implementations for EZC vendor proxies",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./validateAmount": "./lib/validateAmount.js",
+    "./htmlEscape": "./lib/htmlEscape.js",
+    "./debugAllowed": "./lib/debugAllowed.js",
+    "./timingSafeAdmin": "./lib/timingSafeAdmin.js",
+    "./buildAgent": "./lib/buildAgent.js",
+    "./mkWebhook": "./lib/mkWebhook.js",
+    "./journal": "./lib/journal.js"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": { "undici": "6.19.8" }
+}
