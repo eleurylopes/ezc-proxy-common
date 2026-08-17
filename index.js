@@ -1,15 +1,15 @@
-// @ezc/proxy-common — canonical audit-fix implementations shared across
-// EZC vendor proxies (ezc-onlyu-proxy, ezc-fyhub-proxy, ezc-gpag-proxy).
+// @ezc/proxy-common — shared audit-fix implementations for the EZC vendor proxies.
 //
-// Every function here traces back to a specific finding from the July 2026
-// security audit (onlyu-proxy commit 7669e4c). Consumers should import from
-// here rather than re-implement — the weekly-doc-drift-audit will flag any
-// proxy that reimplements a function that exists in this module.
+// Only the three functions below are still shared. `mkWebhook`, `buildAgent` and
+// the journal helpers were ALSO here, but each proxy evolved its own copy after
+// the 2026-07/08 incidents (record-don't-reject webhooks, CF-Connecting-IP origin
+// resolution, per-service journal paths). The versions in this module drifted and
+// were never updated — in particular the old `mkWebhook` here still hard-rejected
+// on `req.ip`, the exact behaviour the proxies deliberately abandoned. To stop
+// anyone re-importing a regressed implementation, those exports were REMOVED
+// (2026-08-17, audit dead-code finding). The per-proxy copies are canonical; the
+// lib/ files remain only for historical reference and are not exported.
 
 export { validateAmount } from './lib/validateAmount.js';
 export { htmlEscape }     from './lib/htmlEscape.js';
 export { debugAllowed }   from './lib/debugAllowed.js';
-export { timingSafeAdmin } from './lib/timingSafeAdmin.js';
-export { buildAgent }     from './lib/buildAgent.js';
-export { mkWebhook }      from './lib/mkWebhook.js';
-export { openJournal, journalWebhook } from './lib/journal.js';

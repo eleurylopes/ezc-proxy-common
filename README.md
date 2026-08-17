@@ -51,3 +51,13 @@ Requires Node.js >= 20 (uses ESM + AbortSignal.timeout in some consumers).
 ## Versioning
 
 `0.x` — API may change. Consumers pin to a commit SHA in package.json until 1.0 stabilizes the interface.
+
+## Exports (2026-08-17)
+
+Only `validateAmount`, `htmlEscape`, `debugAllowed` are exported — the only three
+consumers actually import. `mkWebhook`, `buildAgent` and the journal helpers were
+removed from the public surface: each proxy has its own evolved copy, and the
+versions here had drifted (the old `mkWebhook` still hard-rejected on `req.ip`,
+which the proxies abandoned after the 2026-07-31 incident). The `lib/` files
+remain for reference but are not exported, so a consumer can no longer pick up a
+regressed implementation.
