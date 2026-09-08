@@ -61,3 +61,27 @@ versions here had drifted (the old `mkWebhook` still hard-rejected on `req.ip`,
 which the proxies abandoned after the 2026-07-31 incident). The `lib/` files
 remain for reference but are not exported, so a consumer can no longer pick up a
 regressed implementation.
+
+## Tests
+
+```bash
+npm test   # node --test 'test/*.test.js'
+```
+
+51 unit tests cover the three exported helpers, run in CI on every push
+(`.github/workflows/test.yml`). They use Node's built-in `node:test` — no test
+dependencies.
+
+The suites are deliberately focused on the failure modes that would be costly
+rather than on line coverage:
+
+- **`validateAmount`** — sub-cent precision, the `MAX_AMOUNT_BRL` ceiling
+  boundary, binary-float drift (`0.1 + 0.2`), and non-numeric coercion
+  (`''`/`null` → `0`, `undefined` → `NaN`). Also asserts the ceiling is read
+  **at call time**, which is what lets consumers drop their local copies.
+  Note it *rejects* 3-decimal amounts rather than silently rounding them.
+- **`htmlEscape`** — script-tag and attribute-breakout payloads, ampersand-first
+  ordering (so entities are not double-decoded), and preservation of Portuguese
+  accents.
+- **`debugAllowed`** — fails closed for unset/`false`/`0`/`1`/`yes`, expired
+  windows, and unparseable expiry values; allows only an explicit, live opt-in.

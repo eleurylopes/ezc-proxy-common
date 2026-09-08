@@ -1,0 +1,20 @@
+name: test
+# Unit tests for the shared library. Five services depend on this code, so a
+# regression here is a bug in all of them at once — this must gate every push.
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: node:test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install (no deps required, but keeps the lockfile honest)
+        run: npm ci --ignore-scripts
+      - name: Run tests
+        run: npm test
